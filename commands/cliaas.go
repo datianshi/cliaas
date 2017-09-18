@@ -44,8 +44,9 @@ type CliaasCommand struct {
 
 	ConfigFile ConfigFilePath `short:"c" long:"config" required:"true" description:"Path to config file"`
 
-	ReplaceVM ReplaceVMCommand `command:"replace-vm" description:"Create a new VM with the old VM's IP"`
-	DeleteVM  DeleteVMCommand  `command:"delete-vm" description:"Delete the VM that has the specified identifier"`
+	ReplaceVM        ReplaceVMCommand        `command:"replace-vm" description:"Create a new VM with the old VM's IP"`
+	DeleteVM         DeleteVMCommand         `command:"delete-vm" description:"Delete the VM that has the specified identifier"`
+	SwapLoadBalancer SwapLoadBalancerCommand `command:"swap-lb" description:"Replace a group of VMs attached to an ELB to another group VMs"`
 }
 
 var Cliaas CliaasCommand
