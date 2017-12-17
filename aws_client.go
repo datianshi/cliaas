@@ -363,17 +363,20 @@ func (c *client) SwapLb(identifier string, vmidentifiers []string) error {
 		return fmt.Errorf("Can not find Load Balancer: %s", identifier)
 	}
 	oldInstances := describeLbOutput.LoadBalancerDescriptions[0].Instances
-	deregisterInstancesInput := &elb.DeregisterInstancesFromLoadBalancerInput{
-		Instances:        oldInstances,
-		LoadBalancerName: &identifier,
-	}
-	_, err = c.elbClient.DeregisterInstancesFromLoadBalancer(deregisterInstancesInput)
-	if err != nil {
-		return err
+	if len(oldInstances) != 0 {
+		deregisterInstancesInput := &elb.DeregisterInstancesFromLoadBalancerInput{
+			Instances:        oldInstances,
+			LoadBalancerName: &identifier,
+		}
+		_, err = c.elbClient.DeregisterInstancesFromLoadBalancer(deregisterInstancesInput)
+		if err != nil {
+			return err
+		}
 	}
 	newInstances := make([]*elb.Instance, 0)
 	for _, v := range vmidentifiers {
-		newInstances = append(newInstances, &elb.Instance{InstanceId: &v})
+		id := v
+		newInstances = append(newInstances, &elb.Instance{InstanceId: &id})
 	}
 	registerInstancesInput := &elb.RegisterInstancesWithLoadBalancerInput{
 		Instances:        newInstances,
